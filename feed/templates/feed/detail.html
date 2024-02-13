@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}Post from {{post.author.username}}: {{post.text}}{% endblock %}
+
+{% block body %}
+    {% include "includes/post.html" with post=post show_detail_link=True %}
+{% endblock %}
