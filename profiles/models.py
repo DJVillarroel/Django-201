@@ -11,7 +11,7 @@ class Profile(models.Model):
         related_name="profile",
     )
     
-    image = ImageField(upload_to='media')
+    image = ImageField(upload_to='media', default='default.png')
     banner = ImageField(upload_to='media')
     bio = models.CharField(max_length=240, blank=True)
 

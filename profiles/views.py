@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse, HttpResponseBadRequest
 from feed.models import Post
 from followers.models import Follower
+from .forms import ProfileUpdateForm
+from django.shortcuts import render, redirect
 
 class ProfileDetailView(DetailView):
     http_method_names = ["get"]
@@ -67,3 +69,18 @@ class FollowView(LoginRequiredMixin, View):
             'done': True,
             'wording': 'Unfollow' if data['action'] == 'follow' else 'Follow'
         })
+        
+class ProfileUpdateView(LoginRequiredMixin, View):
+    template_name = 'profiles/settings.html'
+    form_class = ProfileUpdateForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(instance=request.user.profile)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profiles:detail', username=request.user.username)
+        return render(request, self.template_name, {'form': form})
