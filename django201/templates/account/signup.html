@@ -4,32 +4,32 @@
     {% trans "Signup" %}
 {% endblock head_title %}
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign Up" %}
-    {% endelement %}
-    <p>
-        {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
-    </p>
-    {% url 'account_signup' as action_url %}
-    {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-        {% slot body %}
+    <div class="relative py-3 sm:w-96 mx-auto text-center">
+      <span class="text-2xl text-white">Sign Up</span>
+      <div class="mt-4 bg-white shadow-md rounded-lg text-left">
+        <div class="h-2 bg-[#0284c7] rounded-t-md"></div>
+        <div class="px-8 py-6 ">
+          <form method="post">
             {% csrf_token %}
-            
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {% if redirect_field_value %}
-                <input type="hidden"
-                       name="{{ redirect_field_name }}"
-                       value="{{ redirect_field_value }}" />
-            {% endif %}
-        {% endslot %}
-        {% slot actions %}
-            {% element button tags="prominent,signup" type="submit" %}
-                {% trans "Sign Up" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
+            {{ form.non_field_errors }}
+            <label class="block font-semibold"> {% trans "Email" %} </label>
+            {{ form.email.errors }}
+            <input type="text" name="email" value="{{ form.email.value }}" placeholder="{% trans "Email" %}" class="border w-full h-12 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md">
+            <label class="block mt-3 font-semibold"> {% trans "Username" %} </label>
+            {{ form.username.errors }}
+            <input type="text" name="username" value="{{ form.username.value }}" placeholder="{% trans "Username" %}" id="id_username" class="border w-full h-12 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md">
+            <label class="block mt-3 font-semibold"> {% trans "Password" %} </label>
+            {{ form.password1.errors }}
+            <input type="password" name="password1" placeholder="{% trans "Password" %}" class="border w-full h-12 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md">
+            <label class="block mt-3 font-semibold"> {% trans "Confirm Password" %} </label>
+            {{ form.password2.errors }}
+            <input type="password" name="password2" placeholder="{% trans "Confirm Password" %}" class="border w-full h-12 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md">
+            <div class="flex justify-between items-baseline">
+              <button type="submit" class="my-3 bg-white text-gray-800 font-bold rounded border-b-2 border-[#0284c7]       hover:border-[#075985] hover:bg-[#0284c7] hover:text-white shadow-md py-2 px-6 inline-flex items-center"> {% trans "Sign Up" %} </button>
+              <a href="{% url 'account_login' %}" class="text-sm hover:underline"> {% trans "Already have an account? Sign in" %} </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 {% endblock content %}

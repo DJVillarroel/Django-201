@@ -6,6 +6,7 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image', 'banner', 'bio']
+        
 
     def clean_image(self):
         image = self.cleaned_data.get('image', False)

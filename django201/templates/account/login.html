@@ -6,42 +6,34 @@
 {% endblock head_title %}
 {% block content %}
     
-    <div class="relative flex min-h-screen text-gray-800 antialiased flex-col justify-center overflow-hidden py-6 sm:py-12">
-        <div class="relative py-3 sm:w-96 mx-auto text-center">
-        <p>
-            If you have not created an account yet, then please
-            <a href="{{ signup_url }}">sign up</a> first.
-        </p>
-        {% element h1 %}
-            <label class="block font-semibold">{% trans "Login" %}</label>
-        {% endelement %}
-        {% url 'account_login' as login_url %}
-        {% element form form=form method="post" action=login_url tags="entrance,login" %}
-            {% slot body %}
-                {% csrf_token %}
-                
-                
-                {% element fields form=form unlabeled=True %}
-                    
-                {% endelement %}
-                {% if redirect_field_value %}
-                    <input type="hidden"
-                           name="{{ redirect_field_name }}"
-                           value="{{ redirect_field_value }}"
-                     />
-               {% endif %}
-            {% endslot %}
-            {% slot actions %}
-            {% element button type="submit" tags="prominent,login" %}
-                <button type="submit" class="mt-4 bg-purple-500 text-white py-2 px-6 rounded-md hover:bg-purple-600 ">
-                        {% trans "Login" %}
-                </button>
-            {% endelement %}
-            {% endslot %}
-        {% endelement %}
-        {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-        {% endif %}
+    <div class="relative py-3 sm:w-96 mx-auto text-center">
+      <span class="text-2xl text-white">Login to your account</span>
+      <div class="mt-4 bg-white shadow-md rounded-lg text-left">
+        <div class="h-2 bg-[#0284c7] rounded-t-md"></div>
+        <div class="px-8 py-6 ">
+          <form method="post">
+            {% csrf_token %}
+            <label class="block font-semibold"> {% trans "Username or Email" %} </label>
+            <input type="text" name="login" placeholder="{% trans "Email" %}" class="border w-full h-12 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md">
+            {% if form.login.errors %}
+                <p class="text-red-500">{{ form.login.errors }}</p>
+            {% endif %}
+            <label class="block mt-3 font-semibold"> {% trans "Password" %} </label>
+            <input type="password" name="password" placeholder="{% trans "Password" %}" class="border w-full h-12 px-3 py-2 mt-2 hover:outline-none focus:outline-none focus:ring-indigo-500 focus:ring-1 rounded-md">
+            {% if form.password.errors %}
+            <p class="text-red-500">{{ form.password.errors }}</p>
+            {% endif %}
+            <div class="flex justify-between items-baseline">
+              <button type="submit" class="my-3 bg-white text-gray-800 font-bold rounded border-b-2 border-[#0284c7]       hover:border-[#075985] hover:bg-[#0284c7] hover:text-white shadow-md py-2 px-6 inline-flex items-center"> {% trans "Login" %} </button>
+              <a href="{% url 'account_reset_password' %}" class="text-sm hover:underline"> {% trans "Forgot password?" %} </a>
+            </div>
+            {% if request.GET.error == '1' %}
+            <p class="text-red-500">Invalid email or password. Please try again.</p>
+            {% endif %}
+          </form>
+          <p class="mt-4 text-sm text-gray-600">If you don't have an account, <a href="{% url 'account_signup' %}" class="text-[#0284c7] hover:underline">sign up here</a>.</p>
+        </div>
+      </div>
     </div>
 {% endblock content %}
 

@@ -6,6 +6,7 @@ from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
 from followers.models import Follower
 from .models import Post
@@ -32,6 +33,22 @@ class HomePage(TemplateView):
         else:
             posts = Post.objects.all().order_by("-id")[0:30]
         
+        context['posts'] = posts
+        return context
+    
+class UserPostListView(LoginRequiredMixin, TemplateView):
+    http_method_names = ["get"]
+    template_name = "feed/user_posts.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        
+        username = self.kwargs.get('username')
+        user = User.objects.get(username=username)
+        
+        posts = Post.objects.filter(author=user).order_by("-id")
+        
+        context['username'] = username 
         context['posts'] = posts
         return context
         
