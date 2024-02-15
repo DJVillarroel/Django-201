@@ -1,4 +1,5 @@
 {% load static %}
+{% load thumbnail %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,19 +32,34 @@
             </a>
           </li>
           <li>
+            <a href="{% url 'account_logout' %}" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
+              <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-cog"></i></span>
+              <span class="text-sm font-medium">Account Settings</span>
+            </a>
+          </li>
+          <li>
               <a href="{% url 'account_logout' %}" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
                 <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-log-out"></i></span>
                 <span class="text-sm font-medium">Logout</span>
               </a>
-          </ul>
+          </li>
+          <li>
+            <a href="{% url 'profiles:detail' request.user.username %}" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
+              {% thumbnail request.user.profile.image "50x50" crop="center" as im %}
+                  <img class="rounded-full" src="{{ im.url }}" alt="avatar" />
+              {% endthumbnail %}
+              <span class="text-sm font-medium">{{request.user.username}}</span>
+            </a>
+          </li>
+          
           {% else %}
                 <a href="{% url 'account_login' %}" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
                     <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-log-in"></i></span>
                     <span class="text-sm font-medium">Login</span>
                 </a>
           {% endif %}
-              
           </li>
+        </ul>
       </div>
       <div class="p-8">
         {% block body %}

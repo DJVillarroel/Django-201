@@ -12,6 +12,8 @@ class Profile(models.Model):
     )
     
     image = ImageField(upload_to='media')
+    banner = ImageField(upload_to='media')
+    bio = models.CharField(max_length=240, blank=True)
 
     def __str__(self):
         return self.user.username
